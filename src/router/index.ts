@@ -8,6 +8,34 @@ const adminRoutes = [
       {
         path: "dashboard",
         component: () => import("../views/admin/Dashboard.vue"),
+        meta: {
+          title: "Dashboard",
+          icon: "HomeFilled",
+        },
+      },
+      {
+        path: "articles",
+        component: () => import("../views/admin/Articles.vue"),
+        meta: {
+          title: "Articles",
+          icon: "Document",
+        },
+      },
+      {
+        path: "consultations",
+        component: () => import("../views/admin/Consultations.vue"),
+        meta: {
+          title: "Consultations",
+          icon: "ChatLineRound",
+        },
+      },
+      {
+        path: "emotions",
+        component: () => import("../views/admin/Emotions.vue"),
+        meta: {
+          title: "Emotions",
+          icon: "HotWater",
+        },
       },
     ],
   },
