@@ -1,4 +1,4 @@
-import {createRouter, createWebHashHistory} from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
 import AdminLayout from "../components/AdminLayout.vue";
 const adminRoutes = [
   {
@@ -9,7 +9,7 @@ const adminRoutes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: adminRoutes,
 });
 
