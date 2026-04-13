@@ -1,10 +1,15 @@
 import {createRouter, createWebHistory} from "vue-router";
-import AdminLayout from "../components/AdminLayout.vue";
+import AdminLayout from "../components/admin/AdminLayout.vue";
 const adminRoutes = [
   {
     path: "/admin",
     component: AdminLayout,
-    children: [],
+    children: [
+      {
+        path: "dashboard",
+        component: () => import("../views/admin/Dashboard.vue"),
+      },
+    ],
   },
 ];
 
