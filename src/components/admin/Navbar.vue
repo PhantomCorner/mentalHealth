@@ -45,7 +45,7 @@ const handleCommand = (command: string) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
+  height: 100%;
   background-color: #ecf0f1;
   padding: 0 16px;
   .page-title {

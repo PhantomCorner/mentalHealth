@@ -12,7 +12,7 @@ import Sidebar from "./Sidebar.vue";
           <Navbar />
         </el-header>
         <el-main>
-          <router-view></router-view>
+          <router-view class="content-container"></router-view>
         </el-main>
       </el-container>
     </el-container>
@@ -21,6 +21,17 @@ import Sidebar from "./Sidebar.vue";
 
 <style scoped lang="scss">
 .admin-layout {
+  .el-container {
+    height: 100%;
+  }
+  .el-header {
+    padding: 0;
+  }
+
   height: 100vh;
+  .content-container {
+    min-height: calc(100% - 64px);
+    background-color: #ecf0f1;
+  }
 }
 </style>

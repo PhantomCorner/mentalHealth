@@ -1,9 +1,6 @@
 <template>
   <el-aside width="248px" class="sidebar">
-    <el-menu
-      :default-active="activeMenu"
-      :router="true"
-      class="el-menu-vertical-demo">
+    <el-menu :default-active="activeMenu" :router="true">
       <div class="brand">
         <el-image
           class="brand-icon"
@@ -42,6 +39,7 @@ const activeMenu = computed(() => route.path);
 <style scoped lang="scss">
 .sidebar {
   background-color: #2c3e50;
+  height: 100%;
   .brand {
     display: flex;
     align-items: center;
