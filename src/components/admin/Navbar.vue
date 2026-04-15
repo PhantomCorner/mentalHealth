@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import useAdminStore from "@/store/admin";
 const userName = "Admin";
 const handleCommand = (command: string) => {
   if (command === "logout") {
@@ -6,18 +7,20 @@ const handleCommand = (command: string) => {
     console.log("Logging out...");
   }
 };
+const handleCollapse = () => {
+  useAdminStore().toggleSidebar();
+};
 </script>
 
 <template>
   <div class="nav-bar">
     <div class="flex-box">
-      <el-button type="text">
+      <el-button type="text" @click="handleCollapse">
         <el-icon>
           <Expand />
         </el-icon>
-
-        <p class="page-title">Nav bar</p>
       </el-button>
+      <p class="page-title">Nav bar</p>
     </div>
     <div class="flex-box dropdown">
       <el-dropdown placement="bottom" @command="handleCommand">
