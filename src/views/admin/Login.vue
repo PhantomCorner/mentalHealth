@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-import type {FormInstance, FormRules} from "element-plus";
+import {ElMessage, type FormInstance, type FormRules} from "element-plus";
 import {ref} from "vue";
 import {login} from "@/api/admin";
+import {useRouter} from "vue-router";
+const router = useRouter();
 const ruleFormRef = ref<FormInstance>();
 
 const formData = ref({
-  username: "string",
-  password: "string",
+  username: "",
+  password: "",
 });
 const formRules: FormRules = {
   username: [
@@ -29,6 +31,14 @@ const handleLogin = async (formEl: FormInstance | undefined) => {
           console.log("Login successful", res);
           localStorage.setItem("token", res.token);
           localStorage.setItem("userInfo", JSON.stringify(res.userInfo));
+          if (res.userInfo.userType === 2) {
+            ElMessage.success(
+              "Login successful! Redirecting to admin dashboard...",
+            );
+            setTimeout(() => {
+              router.push("/admin");
+            }, 2000);
+          }
         })
         .catch((err) => {
           console.log("Login failed", err);
