@@ -39,6 +39,28 @@ const adminRoutes = [
       },
     ],
   },
+  {
+    path: "/auth",
+    component: () => import("@/components/admin/AuthLayout.vue"),
+    children: [
+      {
+        path: "login",
+        component: () => import("@/views/admin/Login.vue"),
+        meta: {
+          title: "Login",
+          icon: "User",
+        },
+      },
+      {
+        path: "register",
+        component: () => import("@/views/admin/Register.vue"),
+        meta: {
+          title: "Register",
+          icon: "User",
+        },
+      },
+    ],
+  },
 ];
 
 const router = createRouter({

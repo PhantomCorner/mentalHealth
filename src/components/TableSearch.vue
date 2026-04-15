@@ -62,18 +62,6 @@ const formItemAttrs = computed(() => {
   return formItem;
 });
 const ruleFormRef = ref<FormInstance>();
-const ruleForm = reactive<RuleForm>({
-  name: "Hello",
-  region: "",
-  count: "",
-  date1: "",
-  date2: "",
-  delivery: false,
-  location: "",
-  type: [],
-  resource: "",
-  desc: "",
-});
 const emit = defineEmits(["search"]);
 const formData = reactive<Record<string, any>>({});
 const props = defineProps<{
