@@ -3,7 +3,9 @@
     <PageHead>
       <template #title>Articles</template>
       <template #buttons>
-        <el-button type="primary">Create New Article</el-button>
+        <el-button type="primary" @click="dialogVisible = true">
+          Create New Article
+        </el-button>
         <el-button type="default">Edit</el-button>
       </template>
     </PageHead>
@@ -32,9 +34,7 @@
       <!-- <el-table-column prop="updatedAt" label="Updated At" /> -->
       <el-table-column label="Actions" width="250" fixed="right">
         <template #default="{row}">
-          <el-button type="primary" text @click="dialogVisible = true">
-            Edit
-          </el-button>
+          <el-button type="primary" text>Edit</el-button>
           <el-button
             v-if="row.status === 0 || row.status === 2"
             text
@@ -55,7 +55,7 @@
       :page-size="pagination.size"
       @current-change="handlePageChange" />
 
-    <ArticleForm v-model:modelValue="dialogVisible" />
+    <ArticleForm v-model:modelValue="dialogVisible" :categories="categories" />
   </div>
 </template>
 
