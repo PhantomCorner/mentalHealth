@@ -46,6 +46,12 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      style="margin-top: 25px"
+      layout="prev, pager, next"
+      :total="pagination.total"
+      :page-size="pagination.size"
+      @current-change="handlePageChange" />
   </div>
 </template>
 
@@ -101,7 +107,6 @@ onMounted(async () => {
   handleSearch();
 });
 const handleSearch = async (formData: Record<string, any> = {}) => {
-  console.log(formData);
   const params = {
     ...pagination,
     ...formData,
@@ -109,5 +114,10 @@ const handleSearch = async (formData: Record<string, any> = {}) => {
   const {records, total} = await articlePage(params);
   tableData.value = records;
   pagination.total = total;
+};
+
+const handlePageChange = async (page: number) => {
+  pagination.currentPage = page;
+  handleSearch();
 };
 </script>
