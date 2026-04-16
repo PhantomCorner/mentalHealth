@@ -55,7 +55,10 @@
       :page-size="pagination.size"
       @current-change="handlePageChange" />
 
-    <ArticleForm v-model:modelValue="dialogVisible" :categories="categories" />
+    <ArticleForm
+      v-model:modelValue="dialogVisible"
+      :categories="categories"
+      @submit="handleSubmit" />
   </div>
 </template>
 
@@ -126,4 +129,6 @@ const handlePageChange = async (page: number) => {
   pagination.currentPage = page;
   handleSearch();
 };
+
+const handleSubmit = () => {};
 </script>

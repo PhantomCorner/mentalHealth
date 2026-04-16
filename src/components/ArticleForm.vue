@@ -48,12 +48,12 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="Cover Image">
+      <!-- <el-form-item label="Cover Image">
         <el-upload
           v-model:file-list="formData.coverImage"
           action="#"
-          :http-request="handleUpload"
-          :before-upload="beforeUpload"
+          :http-request="handleIMGUpload"
+          :before-upload="beforeIMGUpload"
           accept="image/*">
           <div v-if="!imgURL" class="cover-placeholder">
             <p>Click to upload</p>
@@ -61,6 +61,10 @@
           <img v-else :src="imgURL" class="cover-preview" />
         </el-upload>
         <el-button type="primary">Upload Cover Image</el-button>
+      </el-form-item> -->
+      <el-form-item>
+        <el-button type="primary" @click="handleSubmit">Submit</el-button>
+        <el-button @click="handleClose">Cancel</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
@@ -69,7 +73,7 @@
 <script setup lang="ts">
 import {ref, reactive, computed} from "vue";
 import {ElMessage} from "element-plus";
-import {uploadFile} from "@/api/admin";
+import {uploadFile, createArticle} from "@/api/admin";
 
 const formData = reactive({
   title: "",
@@ -77,7 +81,8 @@ const formData = reactive({
   coverImage: "",
   categoryId: 1,
   summary: "",
-  tagArray: [],
+  tagArray: undefined as any[] | undefined,
+  tags: "",
   id: "",
 });
 const commonTags = [
@@ -101,7 +106,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "success"]);
 const dialogVisible = computed({
   get() {
     return props.modelValue;
@@ -112,13 +117,13 @@ const dialogVisible = computed({
 });
 
 const imgURL = ref("");
-const handleUpload = async (file) => {
+const handleIMGUpload = async (file) => {
   const businessId = crypto.randomUUID();
   const res = await uploadFile(file, {businessId: businessId});
   console.log(res);
 };
 
-const beforeUpload = (file) => {
+const beforeIMGUpload = (file) => {
   console.log(file);
   const isImage = file.type.startsWith("image/");
   if (!isImage) {
@@ -126,6 +131,34 @@ const beforeUpload = (file) => {
     return false;
   }
   return true;
+};
+
+const handleSubmit = async () => {
+  try {
+    const submitData = {
+      ...formData,
+      tags: formData.tagArray.join(","),
+    };
+    delete submitData.tagArray;
+    // console.log(submitData);
+    createArticle(submitData)
+      .then((res) => {
+        console.log("Article created successfully", res);
+        ElMessage.success("Article created successfully");
+        emit("success");
+        handleClose();
+      })
+      .catch((err) => {
+        console.error("Failed to create article", err);
+        ElMessage.error("Failed to create article");
+      });
+  } catch (err) {
+    console.error("Failed to create article", err);
+    ElMessage.error("Failed to create article");
+  }
+};
+const handleClose = () => {
+  dialogVisible.value = false;
 };
 </script>
 
