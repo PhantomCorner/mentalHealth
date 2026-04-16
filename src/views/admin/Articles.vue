@@ -28,6 +28,7 @@
                 ? "Published"
                 : "Archived"
           }}
+          //
         </template>
       </el-table-column>
       <el-table-column prop="createdAt" label="Created At" />
