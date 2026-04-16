@@ -32,7 +32,9 @@
       <!-- <el-table-column prop="updatedAt" label="Updated At" /> -->
       <el-table-column label="Actions" width="250" fixed="right">
         <template #default="{row}">
-          <el-button type="primary" text>Edit</el-button>
+          <el-button type="primary" text @click="dialogVisible = true">
+            Edit
+          </el-button>
           <el-button
             v-if="row.status === 0 || row.status === 2"
             text
@@ -52,6 +54,8 @@
       :total="pagination.total"
       :page-size="pagination.size"
       @current-change="handlePageChange" />
+
+    <ArticleForm v-model:modelValue="dialogVisible" />
   </div>
 </template>
 
@@ -60,6 +64,7 @@ import {onMounted, ref, reactive} from "vue";
 import TableSearch from "@/components/TableSearch.vue";
 import PageHead from "@/components/PageHead.vue";
 import {categoryTree, articlePage} from "@/api/admin";
+import ArticleForm from "@/components/ArticleForm.vue";
 const formItem = [
   {
     comp: "input",
@@ -85,6 +90,7 @@ const formItem = [
     ],
   },
 ];
+const dialogVisible = ref(false);
 const tableData = ref([]);
 const categoryMap = reactive([]);
 const categories = ref([]);
