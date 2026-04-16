@@ -60,6 +60,7 @@
       v-model:modelValue="dialogVisible"
       :categories="categories"
       @submit="handleSubmit"
+      @success="handleSuccess"
       :article="currentArticle" />
   </div>
 </template>
@@ -133,7 +134,10 @@ const handlePageChange = async (page: number) => {
   pagination.currentPage = page;
   handleSearch();
 };
-
+const handleSuccess = () => {
+  dialogVisible.value = false;
+  handleSearch();
+};
 const handleSubmit = () => {};
 const handleEdit = async (row) => {
   if (!row.id) {

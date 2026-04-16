@@ -28,6 +28,10 @@ export const createArticle = (data) => {
   return service.post("knowledge/article", data);
 };
 
+export const editArticle = (id: string, data) => {
+  return service.put(`knowledge/article/${id}`, data);
+};
+
 export const getArticleDetail = (id: string) => {
   return service.get(`knowledge/article/${id}`);
 };

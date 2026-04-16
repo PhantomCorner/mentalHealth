@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import {ref, reactive, computed, watch} from "vue";
 import {ElMessage} from "element-plus";
-import {uploadFile, createArticle} from "@/api/admin";
+import {uploadFile, createArticle, editArticle} from "@/api/admin";
 
 const formData = reactive({
   title: "",
@@ -169,17 +169,17 @@ const handleSubmit = async () => {
     };
     delete submitData.tagArray;
     // console.log(submitData);
-    createArticle(submitData)
-      .then((res) => {
-        console.log("Article created successfully", res);
-        ElMessage.success("Article created successfully");
+
+    if (!isEdit.value) {
+      submitData.id = businessId.value;
+      createArticle(submitData).then((res) => {
         emit("success");
-        handleClose();
-      })
-      .catch((err) => {
-        console.error("Failed to create article", err);
-        ElMessage.error("Failed to create article");
       });
+    } else {
+      editArticle(props.article.id, submitData).then((res) => {
+        emit("success");
+      });
+    }
   } catch (err) {
     console.error("Failed to create article", err);
     ElMessage.error("Failed to create article");
