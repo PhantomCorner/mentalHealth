@@ -3,10 +3,9 @@
     <PageHead>
       <template #title>Articles</template>
       <template #buttons>
-        <el-button type="primary" @click="dialogVisible = true">
+        <el-button type="primary" @click="handleEdit({})">
           Create New Article
         </el-button>
-        <el-button type="default">Edit</el-button>
       </template>
     </PageHead>
     <TableSearch :formItem="formItem" @search="handleSearch" />
@@ -28,24 +27,25 @@
                 ? "Published"
                 : "Archived"
           }}
-          //
         </template>
       </el-table-column>
       <el-table-column prop="createdAt" label="Created At" />
       <!-- <el-table-column prop="updatedAt" label="Updated At" /> -->
       <el-table-column label="Actions" width="250" fixed="right">
         <template #default="{row}">
-          <el-button type="primary" text>Edit</el-button>
+          <el-button type="primary" link @click="handleEdit(row)">
+            Edit
+          </el-button>
           <el-button
             v-if="row.status === 0 || row.status === 2"
-            text
+            link
             type="success">
             Publish
           </el-button>
-          <el-button v-if="row.status === 1" text type="warning">
+          <el-button v-if="row.status === 1" link type="warning">
             Hide
           </el-button>
-          <el-button text type="danger">Delete</el-button>
+          <el-button link type="danger">Delete</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -59,7 +59,8 @@
     <ArticleForm
       v-model:modelValue="dialogVisible"
       :categories="categories"
-      @submit="handleSubmit" />
+      @submit="handleSubmit"
+      :article="currentArticle" />
   </div>
 </template>
 
@@ -67,7 +68,7 @@
 import {onMounted, ref, reactive} from "vue";
 import TableSearch from "@/components/TableSearch.vue";
 import PageHead from "@/components/PageHead.vue";
-import {categoryTree, articlePage} from "@/api/admin";
+import {categoryTree, articlePage, getArticleDetail} from "@/api/admin";
 import ArticleForm from "@/components/ArticleForm.vue";
 const formItem = [
   {
@@ -94,6 +95,8 @@ const formItem = [
     ],
   },
 ];
+const currentArticle = ref(null);
+
 const dialogVisible = ref(false);
 const tableData = ref([]);
 const categoryMap = reactive([]);
@@ -132,4 +135,14 @@ const handlePageChange = async (page: number) => {
 };
 
 const handleSubmit = () => {};
+const handleEdit = async (row) => {
+  if (!row.id) {
+    dialogVisible.value = true;
+    currentArticle.value = {};
+  } else {
+    const detail = await getArticleDetail(row.id);
+    currentArticle.value = detail;
+    dialogVisible.value = true;
+  }
+};
 </script>

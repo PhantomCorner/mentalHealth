@@ -1,22 +1,21 @@
 <template>
   <el-dialog
     v-model="dialogVisible"
-    title="Article Form"
+    :title="isEdit ? 'Edit Article' : 'Create Article'"
     width="50%"
-    :before-close="handleClose"
-    destroy-on-close>
-    <el-form :model="formData" label-width="120px">
-      <el-form-item label="Title">
+    @close="handleClose">
+    <el-form :model="formData" label-width="120px" ref="formRef">
+      <el-form-item label="Title" prop="title">
         <el-input v-model="formData.title" placeholder="Enter article title" />
       </el-form-item>
-      <el-form-item label="Content">
+      <el-form-item label="Content" prop="content">
         <el-input
           v-model="formData.content"
           type="textarea"
           placeholder="Enter article content"
           :rows="10" />
       </el-form-item>
-      <el-form-item label="Category">
+      <el-form-item label="Category" prop="categoryId">
         <el-select v-model="formData.categoryId" placeholder="Select category">
           <el-option
             v-for="item in props.categories"
@@ -25,14 +24,14 @@
             :value="item.value" />
         </el-select>
       </el-form-item>
-      <el-form-item label="Summary">
+      <el-form-item label="Summary" prop="summary">
         <el-input
           v-model="formData.summary"
           type="textarea"
           placeholder="Enter article summary"
           :rows="4" />
       </el-form-item>
-      <el-form-item label="Tag">
+      <el-form-item label="Tag" prop="tagArray">
         <el-select
           v-model="formData.tagArray"
           placeholder="Enter article tag"
@@ -71,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, reactive, computed} from "vue";
+import {ref, reactive, computed, watch} from "vue";
 import {ElMessage} from "element-plus";
 import {uploadFile, createArticle} from "@/api/admin";
 
@@ -104,8 +103,37 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  article: {
+    type: Object,
+    default: null,
+  },
 });
+const businessId = ref();
+const formRef = ref();
 
+// if has id, its create
+// if no id, its edit
+const isEdit = computed(() => !!props.article?.id);
+watch(
+  () => props.article,
+  (newVal) => {
+    if (newVal) {
+      Object.assign(formData, newVal);
+      businessId.value = newVal.id;
+    } else {
+      Object.assign(formData, {
+        title: "",
+        content: "",
+        coverImage: "",
+        categoryId: 1,
+        summary: "",
+        tagArray: undefined,
+        tags: "",
+        id: "",
+      });
+    }
+  },
+);
 const emit = defineEmits(["update:modelValue", "success"]);
 const dialogVisible = computed({
   get() {
@@ -118,7 +146,7 @@ const dialogVisible = computed({
 
 const imgURL = ref("");
 const handleIMGUpload = async (file) => {
-  const businessId = crypto.randomUUID();
+  businessId.value = crypto.randomUUID();
   const res = await uploadFile(file, {businessId: businessId});
   console.log(res);
 };
@@ -158,7 +186,13 @@ const handleSubmit = async () => {
   }
 };
 const handleClose = () => {
-  dialogVisible.value = false;
+  formRef.value?.resetFields();
+
+  formData.tagArray = undefined;
+  formData.coverImage = "";
+  formData.id = "";
+  businessId.value = null;
+  emit("update:modelValue", false);
 };
 </script>
 

@@ -15,7 +15,7 @@ const handleCollapse = () => {
 <template>
   <div class="nav-bar">
     <div class="flex-box">
-      <el-button type="text" @click="handleCollapse">
+      <el-button link @click="handleCollapse">
         <el-icon>
           <Expand />
         </el-icon>

@@ -27,3 +27,7 @@ export const uploadFile = (file, businessInfo) => {
 export const createArticle = (data) => {
   return service.post("knowledge/article", data);
 };
+
+export const getArticleDetail = (id: string) => {
+  return service.get(`knowledge/article/${id}`);
+};
