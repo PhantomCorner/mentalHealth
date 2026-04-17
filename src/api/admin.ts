@@ -27,11 +27,15 @@ export const uploadFile = (file, businessInfo) => {
 export const createArticle = (data) => {
   return service.post("knowledge/article", data);
 };
-
+export const getArticleDetail = (id: string) => {
+  return service.get(`knowledge/article/${id}`);
+};
 export const editArticle = (id: string, data) => {
   return service.put(`knowledge/article/${id}`, data);
 };
-
-export const getArticleDetail = (id: string) => {
-  return service.get(`knowledge/article/${id}`);
+export const deleteArticle = (id: string) => {
+  return service.delete(`knowledge/article/${id}`);
+};
+export const updateArticleStatus = (id: string, status: number) => {
+  return service.put(`knowledge/article/${id}/status`, {status});
 };

@@ -36,16 +36,31 @@
           <el-button type="primary" link @click="handleEdit(row)">
             Edit
           </el-button>
-          <el-button
+          <el-popconfirm
             v-if="row.status === 0 || row.status === 2"
-            link
-            type="success">
-            Publish
-          </el-button>
-          <el-button v-if="row.status === 1" link type="warning">
-            Hide
-          </el-button>
-          <el-button link type="danger">Delete</el-button>
+            :title="`Are you sure to publish article: ${row.title}?`"
+            @confirm="handlePublish(row.id, 1)">
+            <template #reference>
+              <el-button link type="success">Publish</el-button>
+            </template>
+          </el-popconfirm>
+
+          <el-popconfirm
+            v-if="row.status === 1"
+            :title="`Are you sure to hide article: ${row.title}?`"
+            @confirm="handlePublish(row.id, 0)">
+            <template #reference>
+              <el-button link type="warning">Hide</el-button>
+            </template>
+          </el-popconfirm>
+
+          <el-popconfirm
+            title="Are you sure to delete this?"
+            @confirm="handleDelete(row.id)">
+            <template #reference>
+              <el-button link type="danger">Delete</el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -67,9 +82,16 @@
 
 <script setup lang="ts">
 import {onMounted, ref, reactive} from "vue";
+import {ElMessage} from "element-plus";
 import TableSearch from "@/components/TableSearch.vue";
 import PageHead from "@/components/PageHead.vue";
-import {categoryTree, articlePage, getArticleDetail} from "@/api/admin";
+import {
+  categoryTree,
+  articlePage,
+  getArticleDetail,
+  deleteArticle,
+  updateArticleStatus,
+} from "@/api/admin";
 import ArticleForm from "@/components/ArticleForm.vue";
 const formItem = [
   {
@@ -148,5 +170,31 @@ const handleEdit = async (row) => {
     currentArticle.value = detail;
     dialogVisible.value = true;
   }
+};
+const handleDelete = async (id: string) => {
+  console.log("Delete article with id", id);
+  deleteArticle(id)
+    .then(() => {
+      ElMessage.success("Article deleted successfully");
+      handleSearch();
+    })
+    .catch((err) => {
+      console.log("Failed to delete article", err);
+      ElMessage.error("Failed to delete article");
+    });
+};
+
+const handlePublish = (id: string, status: number) => {
+  updateArticleStatus(id, status)
+    .then(() => {
+      ElMessage.success(
+        status === 1 ? "Article published successfully" : "Article hidden",
+      );
+      handleSearch();
+    })
+    .catch((err) => {
+      console.log("Failed to update article status", err);
+      ElMessage.error("Failed to update article status");
+    });
 };
 </script>
