@@ -1,6 +1,31 @@
 <script setup lang="ts">
 import {ref, onMounted, reactive} from "vue";
 import {getConsultationPage, getConsultationDetail} from "@/api/admin";
+const SenderType = {
+  User: 1,
+  AI: 2,
+} as const;
+
+const MessageType = {
+  Text: 1,
+  Image: 2,
+  Voice: 3,
+  Video: 4,
+} as const;
+
+interface Message {
+  id: number;
+  sessionId: number;
+  senderType: (typeof SenderType)[keyof typeof SenderType];
+  senderTypeDesc: string;
+  messageType: (typeof MessageType)[keyof typeof MessageType];
+  messageTypeDesc: string;
+  content: string;
+  createdAt: string;
+  contentLength: number;
+  contentPreview: string;
+  aiModel?: string;
+}
 import PageHead from "@/components/PageHead.vue";
 const dialogVisible = ref(false);
 const tableData = ref([]);
@@ -9,7 +34,7 @@ const pagination = reactive({
   size: 10,
   total: 0,
 });
-const messages = ref([]);
+const messages = ref<Message[]>([]);
 onMounted(async () => {
   const res = await getConsultationPage({});
   const {records, total} = res;

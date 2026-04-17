@@ -46,3 +46,10 @@ export const getConsultationPage = (params) => {
 export const getConsultationDetail = (id: string) => {
   return service.get(`psychological-chat/sessions/${id}/messages`);
 };
+
+export const getEmotionPage = (params) => {
+  return service.get("emotion-diary/admin/page", {params});
+};
+export const deleteEmotion = (id: string) => {
+  return service.delete(`emotion-diary/admin/${id}`);
+};
