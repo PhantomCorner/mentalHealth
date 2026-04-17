@@ -39,3 +39,10 @@ export const deleteArticle = (id: string) => {
 export const updateArticleStatus = (id: string, status: number) => {
   return service.put(`knowledge/article/${id}/status`, {status});
 };
+
+export const getConsultationPage = (params) => {
+  return service.get("psychological-chat/sessions", {params});
+};
+export const getConsultationDetail = (id: string) => {
+  return service.get(`psychological-chat/sessions/${id}/messages`);
+};
