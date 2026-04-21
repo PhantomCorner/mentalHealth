@@ -3,6 +3,7 @@ import AdminLayout from "../components/admin/AdminLayout.vue";
 const adminRoutes = [
   {
     path: "/admin",
+    redirect: "/admin/dashboard",
     component: AdminLayout,
     children: [
       {
@@ -61,11 +62,25 @@ const adminRoutes = [
       },
     ],
   },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    component: () => import("@/views/NotFound.vue"),
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes: adminRoutes,
 });
-
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("token");
+  if (to.path.startsWith("/admin") && !token) {
+    next("/auth/login");
+  } else if (to.path.startsWith("/auth") && token) {
+    next("/admin/dashboard");
+  } else {
+    next();
+  }
+});
 export default router;
