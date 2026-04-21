@@ -1,10 +1,30 @@
 <script setup lang="ts">
 import useAdminStore from "@/store/admin";
+import {userLogout} from "@/api/admin";
+import {ElMessage, ElMessageBox} from "element-plus";
+import {useRouter, useRoute} from "vue-router";
+const router = useRouter();
+const route = useRoute();
 const userName = "Admin";
 const handleCommand = (command: string) => {
   if (command === "logout") {
-    // Handle logout logic here
-    console.log("Logging out...");
+    ElMessageBox.confirm("Are you sure you want to logout?", "Confirm Logout", {
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      type: "warning",
+    })
+      .then(async () => {
+        await userLogout();
+        localStorage.removeItem("token");
+        localStorage.removeItem("userInfo");
+        router.push("/auth/login");
+      })
+      .catch(() => {
+        ElMessage({
+          type: "info",
+          message: "Logout canceled",
+        });
+      });
   }
 };
 const handleCollapse = () => {
@@ -20,7 +40,7 @@ const handleCollapse = () => {
           <Expand />
         </el-icon>
       </el-button>
-      <p class="page-title">Nav bar</p>
+      <p class="page-title">{{ route.meta.title }}</p>
     </div>
     <div class="flex-box dropdown">
       <el-dropdown placement="bottom" @command="handleCommand">

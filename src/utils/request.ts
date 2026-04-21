@@ -31,7 +31,7 @@ service.interceptors.response.use(
       if (data.code === "-1") {
         if (config.url !== "/auth/login") {
           localStorage.removeItem("token");
-          localStorage.removeItem("userInfo");
+          localStorage.removeItem("");
           window.location.href = "/auth/login";
           ElMessage.error("Session expired, please log in again");
         }

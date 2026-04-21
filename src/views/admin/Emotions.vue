@@ -1,6 +1,5 @@
 <template>
   <div>
-    <PageHead title="Emotions" />
     <TableSearch :form-item="formItem" @search="handleSearch" />
     <el-table :data="tableData">
       <el-table-column prop="username" label="Username" link />

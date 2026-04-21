@@ -53,3 +53,10 @@ export const getEmotionPage = (params) => {
 export const deleteEmotion = (id: string) => {
   return service.delete(`emotion-diary/admin/${id}`);
 };
+export function getAnalyticsOverview() {
+  return service.get("/data-analytics/overview");
+}
+
+export function userLogout() {
+  return service.post("/user/logout");
+}

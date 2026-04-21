@@ -65,7 +65,6 @@ const handleConsultationDetail = async (id: string) => {
 
 <template>
   <div>
-    <PageHead title="Consultations" />
     <el-table :data="tableData" style="width: 100%">
       <!-- <el-table-column prop="id" label="ID" width="80" />
       <el-table-column prop="userId" label="User ID" width="120" /> -->
